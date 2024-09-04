@@ -1,4 +1,4 @@
-local select = require('posix.sys.select')
+local sel = require('posix.sys.select')
 local unistd = require('posix.unistd')
 local fcntl = require('posix.fcntl')
 
@@ -21,8 +21,8 @@ end
 -- Run the scheduler and resume coroutines when events occur
 function EventScheduler:run()
     while true do
-        -- Use select to monitor the read_fds for readability
-        local ready_fds = select.select(self.read_fds, nil, nil, 1)  -- 1-second timeout
+        -- Use sel to monitor the read_fds for readability
+        local ready_fds = sel.sel(self.read_fds, nil, nil, 1)  -- 1-second timeout
 
         if ready_fds and ready_fds[1] then
             for _, fd in ipairs(ready_fds[1]) do
